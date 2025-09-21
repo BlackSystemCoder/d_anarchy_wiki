@@ -3,15 +3,15 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<link rel="stylesheet" href="/app/main.css">
-	<script src="/app/plugin/marked.min.js"></script>
-	<script src="/app/plugin/index.umd.js"></script>
+	<link rel="stylesheet" href="/d_anarchy_wiki/app/main.css">
+	<script src="/d_anarchy_wiki/app/plugin/marked.min.js"></script>
+	<script src="/d_anarchy_wiki/app/plugin/index.umd.js"></script>
 </head>
 <body>
 	<article class="article clearfix" id="content">Загрузка...</article>
 	<script>
 		async function loadArticle() {
-			let response = await fetch('/app/article/d_of_sch.md');
+			let response = await fetch('/d_anarchy_wiki/app/article/d_of_sch.md');
 			let text = await response.text();
 			let firstHeading = text.match(/^# (.+)/);
 
