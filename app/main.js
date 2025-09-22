@@ -144,7 +144,7 @@ async function loadArticle() {
 			let slugged = articlePath+'/'+slugger.slug(text);
 
 			if(depth === 1) {
-				return `<h1 id="${slugged}">${text}</h1>\n<small class="after-h1">Материал из Шизовикии</small>\n`;
+				return `<h1 id="${slugged}">${text}</h1>\n<small class="after-h1">Материал из Вики ДШ</small>\n`;
 			}
 
 			return `<h${depth} id="${slugged}"><a href="#${slugged}">${text}</a></h${depth}>\n`;
