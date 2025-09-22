@@ -3,7 +3,7 @@
 /* ================== Переменные ================== */
 
 :root {
-	--black: rgba(23 23 23);
+	--black: rgba(0 0 0);
     --purple: rgb(127 0 127);
     --purple-transparent: rgba(127 0 127 / 0.5);
     --orange: rgb(0 127 0);
@@ -16,11 +16,15 @@
     --image-width: 180px;
     --infobox-width: 360px;
     --max-content-width: 1832px;
-    --muted: #6b7280;
+    --muted: rgb(71 71 71);
     --radius: 8px;
 }
 
 /* ================== Базовая типографика ================== */
+
+html {
+    scroll-behavior: smooth;
+}
 
 body {
     background: var(--bg);
@@ -56,13 +60,19 @@ h3 {
 }
 
 p {
+    color: var(--muted);
     margin: 1rem 0;
 }
 
 .muted,
 small {
     color: var(--muted);
-    font-size: 0.9em;
+    font-size: 0.75em;
+}
+
+.after-h1 {
+    display: block;
+    margin: -2rem 0 1em 0;
 }
 
 a:not(:has(img)) {
@@ -85,6 +95,26 @@ a:not(:has(img)) {
 	&[href="#"]:hover {
     	border-color: var(--orange);
 	}
+}
+
+h1, h2, h3, h4 {
+    a {
+        color: inherit;
+        border: none;
+    }
+
+    a:after {
+        content: '🔗';
+        font-size: 12px;
+        margin-left: 6px;
+        opacity: 0.5;
+        transition: opacity 250ms ease;
+        vertical-align: middle;
+    }
+
+    a:hover:after {
+        opacity: 1;
+    }
 }
 
 hr {
@@ -179,14 +209,7 @@ table.infobox td[colspan="2"] {
 
 article table:first-of-type th:first-child,
 table.infobox th:first-child {
-    background: #f7fbff;
     font-size: 1.05rem;
-    font-weight: 700;
-    text-align: center;
-}
-
-table.infobox td {
-    width: 60%;
 }
 
 @media (max-width: 759px) {
@@ -212,6 +235,10 @@ table td,
 table th {
     padding: 0.55rem 0.8rem;
     vertical-align: middle;
+}
+
+table th {
+    background: #f7fbff;
 }
 
 table td:not(:last-child),

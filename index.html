@@ -4,116 +4,11 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<link rel="stylesheet" href="/d_anarchy_wiki/app/main.css">
+	<script src="/d_anarchy_wiki/app/main.js"></script>
 	<script src="/d_anarchy_wiki/app/plugin/marked.min.js"></script>
-	<script src="/d_anarchy_wiki/app/plugin/index.umd.js"></script>
+	<script src="/d_anarchy_wiki/app/plugin/marked-extended-tables.js"></script>
 </head>
 <body>
 	<article class="article clearfix" id="content">Загрузка...</article>
-	<script>
-		async function loadArticle() {
-			let response = await fetch('/d_anarchy_wiki/app/article/d_of_sch.md');
-			let text = await response.text();
-			let firstHeading = text.match(/^# (.+)/);
-
-			if(firstHeading) {
-				document.title = firstHeading[1];
-			}
-
-			let smartQuotes = {
-				name: 'smartQuotes',
-				level: 'inline',
-				start(src) {
-					return src.match(/["]| - /)?.index;
-				},
-				tokenizer(src) {
-					if(src[0] === '"') {
-						if(quoteStack.length === 0 || quoteStack[quoteStack.length-1] === 'open') {
-							quoteStack.push('close');
-
-							return { type: 'smartQuotes', raw: '"', text: '«' };
-						} else {
-							quoteStack.pop();
-
-							return { type: 'smartQuotes', raw: '"', text: '»' };
-						}
-					}
-					if(src.startsWith(' - ')) {
-						return { type: 'smartQuotes', raw: ' - ', text: ' — ' };
-					}
-				},
-				renderer(token) {
-					return token.text;
-				}
-			};
-
-			let renderer = {
-				image({ href, title, text }) {
-					let caption = title || text || '';
-
-					return `
-						<a href="${href}">
-							<img src="${href}" alt="${escapeHtml(text)}" ${text ? `title="${escapeHtml(text)}"` : ''}>
-						</a>
-					`;
-				},
-				paragraph({ tokens }) {
-					if(tokens.length === 1 && tokens[0].type === 'image') {
-						let img = tokens[0];
-						let caption = img.title;
-
-						return `
-							<figure>
-								${this.parser.parseInline(tokens)}
-								${caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ''}
-							</figure>
-						`;
-					}
-
-					return `<p>${this.parser.parseInline(tokens)}</p>`;
-				},
-				tablecell({ text, header, align, tokens }, { cells }) {
-					let tag = header ? 'th' : 'td';
-					let style = align ? ` style="text-align:${align}"` : '';
-
-					if(cells.length === 1) {
-						let colspan = cells[0].length;
-
-						return `<${tag}${style} colspan="${colspan}">${text}</${tag}>`;
-					}
-
-					return `<${tag}${style}>${text}</${tag}>`;
-				}
-			};
-
-			function escapeHtml(str = '') {
-				return String(str)
-					.replace(/&/g, '&amp;')
-					.replace(/"/g, '&quot;')
-					.replace(/'/g, '&#39;')
-					.replace(/</g, '&lt;')
-					.replace(/>/g, '&gt;');
-			}
-
-			marked.use({
-				extensions: [smartQuotes],
-				hooks: {
-					preprocess(md) {
-						quoteStack = [];
-
-						return md;
-					}
-				}
-			});
-			marked.use(window['extended-tables']());
-			marked.use({ renderer });
-			marked.use({
-				async: true
-			});
-
-			document.getElementById('content').innerHTML = await marked.parse(text);
-		}
-
-		loadArticle();
-	</script>
 </body>
 </html>
